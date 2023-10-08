@@ -1,13 +1,11 @@
 //---------------------------------------------------------------------
 //    FLINT E220-900T22S-JP Library  demo
 //        文字列の送受信　受信時RSSIとSNRを表示
-//    2023/08/14 
+//    2023/10/08 
 //---------------------------------------------------------------------
 
 
 #include "FL_E220_900T22S_JP.h"
-
-
 
 //シールドピン設定
 #define SW_1 12
@@ -18,21 +16,24 @@
 #define M0_pin 9
 #define M1_pin 10
 
-#ifdef ACTIVATE_SOFTWARE_SERIAL
+
+
+//for Arduino Uno R3
 #include <SoftwareSerial.h>
 SoftwareSerial mySerial(RX_pin, TX_pin); // Arduino RX <-- e220 TX, Arduino TX --> e220 RX
 FL_E220_900T22S_JP LoRa1(&mySerial,LORA_POWER_PIN_ENABLE,Lora_power_pin
                         ,AUX_STATUS_PIN_ENABLE,Aux_status_pin,M0_pin,M1_pin);
 //      LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
 //      AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
-#else
 
+
+/*
+//for Arduino Leonardo / 
 FL_E220_900T22S_JP LoRa1(&Serial1,LORA_POWER_PIN_ENABLE,Lora_power_pin
                         ,AUX_STATUS_PIN_ENABLE,Aux_status_pin,M0_pin,M1_pin);
 //      LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
 //      AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
-#endif
-
+*/
 
 void setup() {
 

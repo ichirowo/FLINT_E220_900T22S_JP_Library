@@ -11,11 +11,10 @@
 #ifndef FL_E220_900T22S_JP_h // 2重インクルードを防ぐ
 #define FL_E220_900T22S_JP_h
 
-#define ACTIVATE_SOFTWARE_SERIAL___
 
 
 //デバッグ用
-#define DEBUG_BUILD
+#define DEBUG_BUILD___
 
 #ifdef DEBUG_BUILD
     #define DEBUG_PRINT_HEX( message ) { Serial.print( message ,HEX); }
@@ -167,22 +166,24 @@ class FL_E220_900T22S_JP {
 public:
 
     struct Register Register;
-#ifdef ACTIVATE_SOFTWARE_SERIAL
+
     FL_E220_900T22S_JP(SoftwareSerial* serial, bool lora_power_enable
                         ,uint8_t lora_power_pin, bool aux_status_enable
                         , uint8_t aux_status_pin, uint8_t m0_pin, uint8_t m1_pin);
-#else
+
     FL_E220_900T22S_JP(HardwareSerial* serial, bool lora_power_enable
                         ,uint8_t lora_power_pin, bool aux_status_enable
                         , uint8_t aux_status_pin, uint8_t m0_pin, uint8_t m1_pin);
-#endif
+
 
     void begin();
 
     void mode(uint8_t Mode);
     void reset(unsigned long Time_ms);
 
+    int available();
     void write(uint8_t Data);
+    int read();
 
 
     CODE set_register();
@@ -208,11 +209,9 @@ private:
     uint8_t _m1_pin              = 0;
     uint8_t _mode                = 0;
 
-#ifdef ACTIVATE_SOFTWARE_SERIAL
     SoftwareSerial* ss;
-#else
-    HardwareSerial* ss;
-#endif
+    HardwareSerial* hs;
+
     void register_access(uint8_t *command, uint8_t numlen, uint8_t return_data[64]);
 
 

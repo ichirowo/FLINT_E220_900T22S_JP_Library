@@ -1,7 +1,7 @@
 #include "FL_E220_900T22S_JP.h"
 
 
-#ifdef ACTIVATE_SOFTWARE_SERIAL
+
 /// @brief クレアリンクテクノロジー社のE220-900T22S(JP)用のライブラリ
 /// @param serial SoftwareSerial
 /// @param lora_power_enable LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
@@ -21,8 +21,9 @@ FL_E220_900T22S_JP::FL_E220_900T22S_JP(SoftwareSerial* serial, bool lora_power_e
     _m0_pin            = m0_pin;
     _m1_pin            = m1_pin;
     this->ss = serial;
+    this->hs = nullptr;
 }
-#else
+
 /// @brief クレアリンクテクノロジー社のE220-900T22S(JP)用のライブラリ
 /// @param serial HardwareSerial
 /// @param lora_power_enable LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
@@ -41,14 +42,18 @@ FL_E220_900T22S_JP::FL_E220_900T22S_JP(HardwareSerial* serial, bool lora_power_e
     _aux_status_pin    = aux_status_pin;
     _m0_pin            = m0_pin;
     _m1_pin            = m1_pin;
-    this->ss = serial;
+    this->hs = serial;
 }
-#endif
+
 
 /// @brief ライブラリの初期化
 void FL_E220_900T22S_JP::begin(){
 
-    ss->begin(9600);
+    if(hs){
+        hs->begin(9600);
+    }else{
+        ss->begin(9600);
+    }
 
     if(_lora_power_enable == LORA_POWER_PIN_ENABLE){
         pinMode(_lora_power_pin, OUTPUT);
@@ -62,8 +67,6 @@ void FL_E220_900T22S_JP::begin(){
     digitalWrite(_m0_pin, LOW); 
     digitalWrite(_m1_pin, LOW); 
 
-    //ss->println("Hello, world?"); //LoRa送信
-    
 }
 
 /// @brief LoRaモジュールのMODEを変更
@@ -100,8 +103,28 @@ void FL_E220_900T22S_JP::reset(unsigned long Time_ms){
     }
 }
 
+int FL_E220_900T22S_JP::available(){
+    if(hs){
+        return hs->available();
+    }else{
+        return ss->available();
+    }
+}
+
 void FL_E220_900T22S_JP::write(uint8_t Data){
-    ss->write(Data);
+    if(hs){
+        hs->write(Data);
+    }else{
+        ss->write(Data);
+    }
+}
+
+int FL_E220_900T22S_JP::read(){
+    if(hs){
+        return hs->read();
+    }else{
+        return ss->read();
+    }
 }
 
 /// @brief レジスタ値の書き込み
@@ -132,7 +155,7 @@ CODE FL_E220_900T22S_JP::set_register(){
     //modeを元に戻す
     this->mode(_mode);
     
-    if(receive[0] == 0xC1){
+    if(receive[0] == 0xC1 || receive[1] == 0xC1){
         return CODE_COMPLETE;
     }else if(receive[0] == 0xFF && receive[1] == 0xFF && receive[2] == 0xFF){
         return CODE_FORMAT_ERROR;
@@ -213,7 +236,7 @@ CODE FL_E220_900T22S_JP::set_temporary_register(){
     //modeを元に戻す
     this->mode(_mode);
 
-    if(receive[0] == 0xC1){
+    if(receive[0] == 0xC1 || receive[1] == 0xC1){
         return CODE_COMPLETE;
     }else if(receive[0] == 0xFF && receive[1] == 0xFF && receive[2] == 0xFF){
         return CODE_FORMAT_ERROR;
@@ -227,14 +250,14 @@ CODE FL_E220_900T22S_JP::set_temporary_register(){
 /// @return 受信したデータがあるか
 bool FL_E220_900T22S_JP::receive_string(char *string){
 
-    if (ss->available() > 0){
+    if (this->available() > 0){
         delay(200);
         DEBUG_PRINT(" available= ");
-        DEBUG_PRINTLN(ss->available());
+        DEBUG_PRINTLN(this->available());
 
         uint8_t i = 0;
-        while(ss->available() != 0){
-            string[i] = ss->read();
+        while(this->available() != 0){
+            string[i] = this->read();
             DEBUG_PRINT_HEX(string[i]);
             DEBUG_PRINT(" ");
             i++;
@@ -269,13 +292,13 @@ void FL_E220_900T22S_JP::send_string(uint8_t addh, uint8_t addl, uint8_t ch, cha
 
     DEBUG_PRINT("send = ");
 
-    ss->write(addh);
-    ss->write(addl);
-    ss->write(ch);
+    this->write(addh);
+    this->write(addl);
+    this->write(ch);
 
     uint8_t i = 0;
     while(string[i] != 0x00){
-        ss->write(string[i]);
+        this->write(string[i]);
         DEBUG_WRITE(string[i]);
         DEBUG_PRINT(" ");
 
@@ -338,21 +361,21 @@ void FL_E220_900T22S_JP::register_access(uint8_t *command, uint8_t numlen, uint8
     for (int i = 0; i < numlen ; i++) {
         DEBUG_PRINT_HEX(command[i]);
         DEBUG_PRINT(" ");
-        ss->write(command[i]);
+        this->write(command[i]);
     }
     DEBUG_PRINTLN("");
 
     delay(200);
 
     DEBUG_PRINT("Rev = ");
-    DEBUG_PRINT(ss->available());
+    DEBUG_PRINT(this->available());
     DEBUG_PRINT(" - ");
 
     uint8_t i = 0;
-    while(ss->available() != 0){
-        uint8_t aaa = ss->read();
-        return_data[i] = aaa;
-        DEBUG_PRINT_HEX(aaa);
+    while(this->available() != 0){
+        uint8_t readtmp = this->read();
+        return_data[i] = readtmp;
+        DEBUG_PRINT_HEX(readtmp);
         DEBUG_PRINT(" ");
         i++;
     }
