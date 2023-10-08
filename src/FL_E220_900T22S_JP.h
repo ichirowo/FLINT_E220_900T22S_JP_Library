@@ -11,9 +11,11 @@
 #ifndef FL_E220_900T22S_JP_h // 2重インクルードを防ぐ
 #define FL_E220_900T22S_JP_h
 
+#define ACTIVATE_SOFTWARE_SERIAL___
+
 
 //デバッグ用
-#define DEBUG_BUILD__NO
+#define DEBUG_BUILD
 
 #ifdef DEBUG_BUILD
     #define DEBUG_PRINT_HEX( message ) { Serial.print( message ,HEX); }
@@ -205,11 +207,11 @@ private:
     uint8_t _m0_pin              = 0;
     uint8_t _m1_pin              = 0;
     uint8_t _mode                = 0;
+
 #ifdef ACTIVATE_SOFTWARE_SERIAL
     SoftwareSerial* ss;
 #else
     HardwareSerial* ss;
-    
 #endif
     void register_access(uint8_t *command, uint8_t numlen, uint8_t return_data[64]);
 

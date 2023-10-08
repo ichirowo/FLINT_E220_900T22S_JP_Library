@@ -4,7 +4,7 @@
 //    2023/08/14 
 //---------------------------------------------------------------------
 
-#define ACTIVATE_SOFTWARE_SERIAL
+
 #include "FL_E220_900T22S_JP.h"
 
 
@@ -154,6 +154,7 @@ void loop() {
             i++;
         }
         Serial.println("");
+
 
         //RSSIとSNRを表示
         if(LoRa1.rssi_snr()){
