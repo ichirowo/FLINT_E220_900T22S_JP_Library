@@ -131,7 +131,7 @@ int FL_E220_900T22S_JP::read(){
 /// @return エラーコード
 CODE FL_E220_900T22S_JP::set_register(){
 
-    uint8_t command[] = {
+    int command[] = {
                      0xC0
                     ,0x00
                     ,0x08
@@ -149,8 +149,8 @@ CODE FL_E220_900T22S_JP::set_register(){
     digitalWrite(_m0_pin, HIGH); 
     digitalWrite(_m1_pin, HIGH); 
 
-    uint8_t receive[64];
-    register_access(command, sizeof(command) / sizeof(uint8_t), receive);
+    int receive[64];
+    register_access(command, sizeof(command) / sizeof(int), receive);
 
     //modeを元に戻す
     this->mode(_mode);
@@ -168,7 +168,7 @@ CODE FL_E220_900T22S_JP::set_register(){
 /// @return エラーコード
 CODE FL_E220_900T22S_JP::read_register(){
 
-    uint8_t command[] = {
+    int command[] = {
                      0xC1
                     ,0x00
                     ,0x09
@@ -178,7 +178,7 @@ CODE FL_E220_900T22S_JP::read_register(){
     digitalWrite(_m0_pin, HIGH); 
     digitalWrite(_m1_pin, HIGH); 
 
-    uint8_t receive[64];
+    int receive[64];
     register_access(command, sizeof(command) / sizeof(uint8_t), receive);
 
     //modeを元に戻す
@@ -212,7 +212,7 @@ CODE FL_E220_900T22S_JP::read_register(){
 /// @return エラーコード
 CODE FL_E220_900T22S_JP::set_temporary_register(){
 
-    uint8_t command[] = {
+    int command[] = {
                      0xC2
                     ,0x00
                     ,0x08
@@ -230,7 +230,7 @@ CODE FL_E220_900T22S_JP::set_temporary_register(){
     digitalWrite(_m0_pin, HIGH); 
     digitalWrite(_m1_pin, HIGH); 
 
-    uint8_t receive[64];
+    int receive[64];
     register_access(command, sizeof(command) / sizeof(uint8_t), receive);
 
     //modeを元に戻す
@@ -251,7 +251,6 @@ CODE FL_E220_900T22S_JP::set_temporary_register(){
 bool FL_E220_900T22S_JP::receive_string(char *string){
 
     if (this->available() > 0){
-        delay(200);
         DEBUG_PRINT(" available= ");
         DEBUG_PRINTLN(this->available());
 
@@ -264,6 +263,7 @@ bool FL_E220_900T22S_JP::receive_string(char *string){
             if(i == 68){
                 break;
             }
+            delay(2);
         }
         string[i] = 0x00;   //終端文字
 
@@ -316,9 +316,9 @@ bool FL_E220_900T22S_JP::rssi_snr(){
 
     if(Register.Rssi_noise == RSSI_NOISE_Enabled){
 
-        uint8_t command[] = {0xC0, 0xC1, 0xC2, 0xC3, 0x00, 0x02 };
+        int command[] = {0xC0, 0xC1, 0xC2, 0xC3, 0x00, 0x02 };
 
-        uint8_t receive[64];
+        int receive[64];
         register_access(command, sizeof(command) / sizeof(uint8_t), receive);
 
         if(receive[0] == 0xC1){
@@ -342,7 +342,6 @@ bool FL_E220_900T22S_JP::rssi_snr(){
 /// @return AUX LEDが光っている時にtrue
 bool FL_E220_900T22S_JP::aux_status(){
 
-    bool status = false;
     if(_aux_status_enable == AUX_STATUS_PIN_ENABLE){
         return !digitalRead(_aux_status_pin);
      }else{
@@ -353,7 +352,7 @@ bool FL_E220_900T22S_JP::aux_status(){
 
 // private:
 
-void FL_E220_900T22S_JP::register_access(uint8_t *command, uint8_t numlen, uint8_t return_data[64]){
+void FL_E220_900T22S_JP::register_access(int *command, int numlen, int return_data[64]){
 
     delay(200); 
 

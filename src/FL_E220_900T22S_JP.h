@@ -14,7 +14,7 @@
 
 
 //デバッグ用
-#define DEBUG_BUILD___
+#define DEBUG_BUILD
 
 #ifdef DEBUG_BUILD
     #define DEBUG_PRINT_HEX( message ) { Serial.print( message ,HEX); }
@@ -212,7 +212,7 @@ private:
     SoftwareSerial* ss;
     HardwareSerial* hs;
 
-    void register_access(uint8_t *command, uint8_t numlen, uint8_t return_data[64]);
+    void register_access(int *command, int numlen, int return_data[64]);
 
 
 };
