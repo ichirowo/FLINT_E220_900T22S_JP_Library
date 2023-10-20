@@ -7,10 +7,15 @@
 //
 // Note: E220-900T22S (JP) is a module customized for Japan.
 //       This library does not work with E220-900T22S.
+//
+//    Copyright (c) 2023 flint.works　　https://flint.works/
+//    Released under the MIT license
+//    https://opensource.org/licenses/mit-license.php
+//
 //---------------------------------------------------------------------
 
-#ifndef FL_E220_900T22S_JP_h // 2重インクルードを防ぐ
-#define FL_E220_900T22S_JP_h
+#ifndef FLINT_E220_900T22S_JP_h // 2重インクルードを防ぐ
+#define FLINT_E220_900T22S_JP_h
 
 //デバッグ用
 #define DEBUG_BUILD
@@ -171,22 +176,22 @@ struct Register
 
 
 
-class FL_E220_900T22S_JP {
+class FLINT_E220_900T22S_JP {
 public:
 
     struct Register Register;
 
 #ifdef ESP32
-    FL_E220_900T22S_JP(HardwareSerial* serial, int rx_pin, int tx_pin
+    FLINT_E220_900T22S_JP(HardwareSerial* serial, int rx_pin, int tx_pin
                         ,bool lora_power_enable
                         ,uint8_t lora_power_pin, bool aux_status_enable
                         , uint8_t aux_status_pin, uint8_t m0_pin, uint8_t m1_pin);
 #else
-    FL_E220_900T22S_JP(SoftwareSerial* serial, bool lora_power_enable
+    FLINT_E220_900T22S_JP(SoftwareSerial* serial, bool lora_power_enable
                         ,uint8_t lora_power_pin, bool aux_status_enable
                         , uint8_t aux_status_pin, uint8_t m0_pin, uint8_t m1_pin);
 
-    FL_E220_900T22S_JP(HardwareSerial* serial, bool lora_power_enable
+    FLINT_E220_900T22S_JP(HardwareSerial* serial, bool lora_power_enable
                         ,uint8_t lora_power_pin, bool aux_status_enable
                         , uint8_t aux_status_pin, uint8_t m0_pin, uint8_t m1_pin);
 #endif
@@ -233,8 +238,6 @@ private:
     SoftwareSerial* ss;
     HardwareSerial* hs;
 #endif
-
-
 
     void register_access(int *command, int numlen, int return_data[64]);
 

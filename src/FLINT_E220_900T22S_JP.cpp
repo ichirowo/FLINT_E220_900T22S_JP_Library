@@ -1,4 +1,4 @@
-#include "FL_E220_900T22S_JP.h"
+#include "FLINT_E220_900T22S_JP.h"
 
 
 
@@ -13,7 +13,7 @@
 /// @param aux_status_pin AUXの状態をINPUTするピン
 /// @param m0_pin モード切り替えのM0を接続したピン
 /// @param m1_pin モード切り替えのM1を接続したピン
-FL_E220_900T22S_JP::FL_E220_900T22S_JP(HardwareSerial* serial, int rx_pin, int tx_pin
+FLINT_E220_900T22S_JP::FLINT_E220_900T22S_JP(HardwareSerial* serial, int rx_pin, int tx_pin
                         ,bool lora_power_enable
                         ,uint8_t lora_power_pin, bool aux_status_enable
                         , uint8_t aux_status_pin, uint8_t m0_pin, uint8_t m1_pin){
@@ -37,7 +37,7 @@ FL_E220_900T22S_JP::FL_E220_900T22S_JP(HardwareSerial* serial, int rx_pin, int t
 /// @param aux_status_pin AUXの状態をINPUTするピン
 /// @param m0_pin モード切り替えのM0を接続したピン
 /// @param m1_pin モード切り替えのM1を接続したピン
-FL_E220_900T22S_JP::FL_E220_900T22S_JP(SoftwareSerial* serial, bool lora_power_enable
+FLINT_E220_900T22S_JP::FLINT_E220_900T22S_JP(SoftwareSerial* serial, bool lora_power_enable
                         ,uint8_t lora_power_pin, bool aux_status_enable
                         , uint8_t aux_status_pin, uint8_t m0_pin, uint8_t m1_pin){
 
@@ -60,7 +60,7 @@ FL_E220_900T22S_JP::FL_E220_900T22S_JP(SoftwareSerial* serial, bool lora_power_e
 /// @param aux_status_pin AUXの状態をINPUTするピン
 /// @param m0_pin モード切り替えのM0を接続したピン
 /// @param m1_pin モード切り替えのM1を接続したピン
-FL_E220_900T22S_JP::FL_E220_900T22S_JP(HardwareSerial* serial, bool lora_power_enable
+FLINT_E220_900T22S_JP::FLINT_E220_900T22S_JP(HardwareSerial* serial, bool lora_power_enable
                         ,uint8_t lora_power_pin, bool aux_status_enable
                         , uint8_t aux_status_pin, uint8_t m0_pin, uint8_t m1_pin){
 
@@ -77,7 +77,7 @@ FL_E220_900T22S_JP::FL_E220_900T22S_JP(HardwareSerial* serial, bool lora_power_e
 
 
 /// @brief ライブラリの初期化
-void FL_E220_900T22S_JP::begin(){
+void FLINT_E220_900T22S_JP::begin(){
 
     if(hs){
         hs->begin(9600);
@@ -101,7 +101,7 @@ void FL_E220_900T22S_JP::begin(){
 
 /// @brief LoRaモジュールのMODEを変更
 /// @param Mode 0～3
-void FL_E220_900T22S_JP::mode(uint8_t Mode){
+void FLINT_E220_900T22S_JP::mode(uint8_t Mode){
     _mode = Mode;
 
     if(Mode == MODE_NORMAL){
@@ -124,7 +124,7 @@ void FL_E220_900T22S_JP::mode(uint8_t Mode){
 
 /// @brief LoRaモジュールをリセット
 /// @param Time_ms OFFの時間 
-void FL_E220_900T22S_JP::reset(unsigned long Time_ms){
+void FLINT_E220_900T22S_JP::reset(unsigned long Time_ms){
 
     if(_lora_power_enable == LORA_POWER_PIN_ENABLE){
         digitalWrite(_lora_power_pin, HIGH);
@@ -133,7 +133,7 @@ void FL_E220_900T22S_JP::reset(unsigned long Time_ms){
     }
 }
 
-int FL_E220_900T22S_JP::available(){
+int FLINT_E220_900T22S_JP::available(){
     if(hs){
         return hs->available();
     }else{
@@ -141,7 +141,7 @@ int FL_E220_900T22S_JP::available(){
     }
 }
 
-void FL_E220_900T22S_JP::write(uint8_t Data){
+void FLINT_E220_900T22S_JP::write(uint8_t Data){
     if(hs){
         hs->write(Data);
     }else{
@@ -149,7 +149,7 @@ void FL_E220_900T22S_JP::write(uint8_t Data){
     }
 }
 
-int FL_E220_900T22S_JP::read(){
+int FLINT_E220_900T22S_JP::read(){
     if(hs){
         return hs->read();
     }else{
@@ -159,7 +159,7 @@ int FL_E220_900T22S_JP::read(){
 
 /// @brief レジスタ値の書き込み
 /// @return エラーコード
-CODE FL_E220_900T22S_JP::set_register(){
+CODE FLINT_E220_900T22S_JP::set_register(){
 
     int command[] = {
                      0xC0
@@ -196,7 +196,7 @@ CODE FL_E220_900T22S_JP::set_register(){
 
 /// @brief レジスタ値の読み出し
 /// @return エラーコード
-CODE FL_E220_900T22S_JP::read_register(){
+CODE FLINT_E220_900T22S_JP::read_register(){
 
     int command[] = {
                      0xC1
@@ -240,7 +240,7 @@ CODE FL_E220_900T22S_JP::read_register(){
 
 /// @brief 一時作業レジスタの書き込み
 /// @return エラーコード
-CODE FL_E220_900T22S_JP::set_temporary_register(){
+CODE FLINT_E220_900T22S_JP::set_temporary_register(){
 
     int command[] = {
                      0xC2
@@ -278,7 +278,7 @@ CODE FL_E220_900T22S_JP::set_temporary_register(){
 /// @brief 文字列としてデータを受信する(Chによって32byte(29文字まで)制限(データシートP18)、もしくはSerialのバッファサイズ64byte(62文字まで) の制限あり。
 /// @param string 受信する文字列を収納する変数
 /// @return 受信したデータがあるか
-bool FL_E220_900T22S_JP::receive_string(char *string){
+bool FLINT_E220_900T22S_JP::receive_string(char *string){
 
     if (this->available() > 0){
         DEBUG_PRINT(" available= ");
@@ -318,7 +318,7 @@ bool FL_E220_900T22S_JP::receive_string(char *string){
 /// @param addl 送信先のモジュールアドレスの下位
 /// @param ch 送信先のチャンネル
 /// @param string 送信データ
-void FL_E220_900T22S_JP::send_string(uint8_t addh, uint8_t addl, uint8_t ch, char* string){
+void FLINT_E220_900T22S_JP::send_string(uint8_t addh, uint8_t addl, uint8_t ch, char* string){
 
     DEBUG_PRINT("send = ");
 
@@ -342,7 +342,7 @@ void FL_E220_900T22S_JP::send_string(uint8_t addh, uint8_t addl, uint8_t ch, cha
 
 /// @brief RSSIとSNR値を取得
 /// @return 取得成功
-bool FL_E220_900T22S_JP::rssi_snr(){
+bool FLINT_E220_900T22S_JP::rssi_snr(){
 
     if(Register.Rssi_noise == RSSI_NOISE_Enabled){
 
@@ -370,7 +370,7 @@ bool FL_E220_900T22S_JP::rssi_snr(){
 
 /// @brief AUX_STATUS_PIN_ENABLE の場合
 /// @return AUX LEDが光っている時にtrue
-bool FL_E220_900T22S_JP::aux_status(){
+bool FLINT_E220_900T22S_JP::aux_status(){
 
     if(_aux_status_enable == AUX_STATUS_PIN_ENABLE){
         return !digitalRead(_aux_status_pin);
@@ -382,7 +382,7 @@ bool FL_E220_900T22S_JP::aux_status(){
 
 // private:
 
-void FL_E220_900T22S_JP::register_access(int *command, int numlen, int return_data[64]){
+void FLINT_E220_900T22S_JP::register_access(int *command, int numlen, int return_data[64]){
 
     delay(200); 
 

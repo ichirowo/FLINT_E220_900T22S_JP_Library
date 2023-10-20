@@ -2,10 +2,19 @@
 //    FLINT E220-900T22S-JP Library  demo
 //        レジスタの内容を全てserialに出力
 //    2023/10/08
+//    for ArduinoIDE 2.2.1以降
+//
+// Note: E220-900T22S (JP) is a module customized for Japan.
+//       This library does not work with E220-900T22S.
+//
+//    Copyright (c) 2023 FLINT　　https://flint.works/
+//    Released under the MIT license
+//    https://opensource.org/licenses/mit-license.php
+//
 //---------------------------------------------------------------------
 
 
-#include "FL_E220_900T22S_JP.h"
+#include "FLINT_E220_900T22S_JP.h"
 
 //シールドピン設定
 #define SW_1 12
@@ -21,7 +30,7 @@
 //for Arduino Uno R3
 #include <SoftwareSerial.h>
 SoftwareSerial mySerial(RX_pin, TX_pin); // Arduino RX <-- e220 TX, Arduino TX --> e220 RX
-FL_E220_900T22S_JP LoRa1(&mySerial,LORA_POWER_PIN_ENABLE,Lora_power_pin
+FLINT_E220_900T22S_JP LoRa1(&mySerial,LORA_POWER_PIN_ENABLE,Lora_power_pin
                         ,AUX_STATUS_PIN_ENABLE,Aux_status_pin,M0_pin,M1_pin);
 //      LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
 //      AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
@@ -29,7 +38,7 @@ FL_E220_900T22S_JP LoRa1(&mySerial,LORA_POWER_PIN_ENABLE,Lora_power_pin
 
 
 //for Arduino Leonardo / 
-FL_E220_900T22S_JP LoRa1(&Serial1,LORA_POWER_PIN_ENABLE,Lora_power_pin
+FLINT_E220_900T22S_JP LoRa1(&Serial1,LORA_POWER_PIN_ENABLE,Lora_power_pin
                         ,AUX_STATUS_PIN_ENABLE,Aux_status_pin,M0_pin,M1_pin);
 //      LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
 //      AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
@@ -103,7 +112,7 @@ void setup() {
 
     //RSSIバイトの有効化
     LoRa1.Register.Rssi_byte = RSSI_BYTE::RSSI_BYTE_Disabled;     // (default)
-//  LoRa1.Register.Rssi_byte = RSSI_BYTE::RSSI_BYTE_Enabled;     //未対応
+//  LoRa1.Register.Rssi_byte = RSSI_BYTE::RSSI_BYTE_Enabled;     //このライブラリでは未対応
 
     //送信方法
 //  LoRa1.Register.Transmission_method = TRANSMISSION_METHOD::TRANSMISSION_METHOD_TRANSPARENT; //おすすめしません

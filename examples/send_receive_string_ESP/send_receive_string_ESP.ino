@@ -2,12 +2,62 @@
 //    FLINT E220-900T22S-JP Library  demo
 //        文字列の送受信　受信時RSSIとSNRを表示
 //    2023/10/08 
+//    for ArduinoIDE 2.2.1以降
+//
+// Note: E220-900T22S (JP) is a module customized for Japan.
+//       This library does not work with E220-900T22S.
+//
+//    Copyright (c) 2023 flint.works　　https://flint.works/
+//    Released under the MIT license
+//    https://opensource.org/licenses/mit-license.php
+//
 //---------------------------------------------------------------------
 
 
-#include "FL_E220_900T22S_JP.h"
+#include "FLINT_E220_900T22S_JP.h"
 
-//シールドピン設定
+
+/*
+//for Arduino Uno R3 ----------------------------------------------------
+// ArduinoIDE [ツール]→[ボード]→[Arduino Uno]
+// FLINT LoRa無線シールド(E220-900T22S for Arduino) SW9=D5/D6
+#define SW_1 12
+#define RX_pin 5    
+#define TX_pin 6
+#define Lora_power_pin 11
+#define Aux_status_pin 8
+#define M0_pin 9
+#define M1_pin 10
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(RX_pin, TX_pin); // Arduino RX <-- e220 TX, Arduino TX --> e220 RX
+FLINT_E220_900T22S_JP LoRa1(&mySerial,LORA_POWER_PIN_ENABLE,Lora_power_pin
+                        ,AUX_STATUS_PIN_ENABLE,Aux_status_pin,M0_pin,M1_pin);
+//      LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
+//      AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
+//-------------------------------------------------------------------------
+*/
+
+
+
+//for Arduino Leonardo --------------------------------------------------
+// ArduinoIDE [ツール]→[ボード]→[Arduino Leonardo]
+// FLINT LoRa無線シールド(E220-900T22S for Arduino) SW9=D0/D1
+#define SW_1 12
+#define Lora_power_pin 11
+#define Aux_status_pin 8
+#define M0_pin 9
+#define M1_pin 10
+FLINT_E220_900T22S_JP LoRa1(&Serial1,LORA_POWER_PIN_ENABLE,Lora_power_pin
+                        ,AUX_STATUS_PIN_ENABLE,Aux_status_pin,M0_pin,M1_pin);
+//      LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
+//      AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
+//-------------------------------------------------------------------------
+
+
+/*
+//for ESPr® One 32 ----------------------------------------------------
+// ArduinoIDE [ツール]→[ボード]→[ESP32 Dev Module]
+// FLINT LoRa無線シールド(E220-900T22S for Arduino) SW9=D5/D6 & RSP32のIO13とLoRaのRXを手配線接続 
 #define SW_1 19
 #define RX_pin 14    
 #define TX_pin 13
@@ -15,31 +65,13 @@
 #define Aux_status_pin 16
 #define M0_pin 17
 #define M1_pin 5
-
-
-/*
-//for Arduino Uno R3
-#include <SoftwareSerial.h>
-SoftwareSerial mySerial(RX_pin, TX_pin); // Arduino RX <-- e220 TX, Arduino TX --> e220 RX
-FL_E220_900T22S_JP LoRa1(&mySerial,LORA_POWER_PIN_ENABLE,Lora_power_pin
+FLINT_E220_900T22S_JP LoRa1(&Serial1,RX_pin,TX_pin,LORA_POWER_PIN_ENABLE,Lora_power_pin
                         ,AUX_STATUS_PIN_ENABLE,Aux_status_pin,M0_pin,M1_pin);
 //      LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
 //      AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
+//-------------------------------------------------------------------------
 */
 
-/*
-//for Arduino Leonardo / 
-FL_E220_900T22S_JP LoRa1(&Serial1,LORA_POWER_PIN_ENABLE,Lora_power_pin
-                        ,AUX_STATUS_PIN_ENABLE,Aux_status_pin,M0_pin,M1_pin);
-//      LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
-//      AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
-*/
-
-//for ESPr® One 32 / 
-FL_E220_900T22S_JP LoRa1(&Serial1,RX_pin,TX_pin,LORA_POWER_PIN_ENABLE,Lora_power_pin
-                        ,AUX_STATUS_PIN_ENABLE,Aux_status_pin,M0_pin,M1_pin);
-//      LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
-//      AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
 
 
 void setup() {
@@ -48,9 +80,9 @@ void setup() {
 
     //ライブラリ設定-------------------------
     LoRa1.begin();
-    LoRa1.reset(200);       //モジュールをリセット
+    LoRa1.reset(200);       //モジュールをリセット200ms
 
-    //LoRaモジュール設定
+    //LoRaモジュール設定------------------------------------------
     
     //ADDH
     LoRa1.Register.Addh = 0x00;
@@ -109,7 +141,7 @@ void setup() {
 
     //RSSIバイトの有効化
     LoRa1.Register.Rssi_byte = RSSI_BYTE::RSSI_BYTE_Disabled;     // (default)
-//  LoRa1.Register.Rssi_byte = RSSI_BYTE::RSSI_BYTE_Enabled;     //未対応
+//  LoRa1.Register.Rssi_byte = RSSI_BYTE::RSSI_BYTE_Enabled;     //このライブラリでは未対応
 
     //送信方法
 //  LoRa1.Register.Transmission_method = TRANSMISSION_METHOD::TRANSMISSION_METHOD_TRANSPARENT; //おすすめしません
@@ -175,7 +207,7 @@ void loop() {
 
     }
 
-    //D12 スイッチ
+    //D12 スイッチ(送信)
     if(digitalRead(SW_1) == LOW){
         Serial.println("SW_1 ");
 
