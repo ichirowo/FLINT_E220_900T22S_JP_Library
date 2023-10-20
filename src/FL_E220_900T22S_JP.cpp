@@ -2,6 +2,33 @@
 
 
 
+#ifdef ESP32
+/// @brief クレアリンクテクノロジー社のE220-900T22S(JP)用のライブラリ
+/// @param serial HardwareSerial
+/// @param rx_pin RXピン
+/// @param tx_pin TXピン
+/// @param lora_power_enable LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
+/// @param lora_power_pin LoRaモジュールの電源のON/OFFするピン
+/// @param aux_status_enable AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
+/// @param aux_status_pin AUXの状態をINPUTするピン
+/// @param m0_pin モード切り替えのM0を接続したピン
+/// @param m1_pin モード切り替えのM1を接続したピン
+FL_E220_900T22S_JP::FL_E220_900T22S_JP(HardwareSerial* serial, int rx_pin, int tx_pin
+                        ,bool lora_power_enable
+                        ,uint8_t lora_power_pin, bool aux_status_enable
+                        , uint8_t aux_status_pin, uint8_t m0_pin, uint8_t m1_pin){
+
+    _lora_power_enable = lora_power_enable;
+    _lora_power_pin    = lora_power_pin;
+    _aux_status_enable = aux_status_enable;
+    _aux_status_pin    = aux_status_pin;
+    _m0_pin            = m0_pin;
+    _m1_pin            = m1_pin;
+    this->hs = serial;
+    hs->begin(9600, SERIAL_8N1, rx_pin, tx_pin);
+}
+
+#else
 /// @brief クレアリンクテクノロジー社のE220-900T22S(JP)用のライブラリ
 /// @param serial SoftwareSerial
 /// @param lora_power_enable LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
@@ -22,6 +49,7 @@ FL_E220_900T22S_JP::FL_E220_900T22S_JP(SoftwareSerial* serial, bool lora_power_e
     _m1_pin            = m1_pin;
     this->ss = serial;
     this->hs = nullptr;
+    ss->begin(9600);
 }
 
 /// @brief クレアリンクテクノロジー社のE220-900T22S(JP)用のライブラリ
@@ -43,7 +71,9 @@ FL_E220_900T22S_JP::FL_E220_900T22S_JP(HardwareSerial* serial, bool lora_power_e
     _m0_pin            = m0_pin;
     _m1_pin            = m1_pin;
     this->hs = serial;
+    hs->begin(9600);
 }
+#endif
 
 
 /// @brief ライブラリの初期化
@@ -179,7 +209,7 @@ CODE FL_E220_900T22S_JP::read_register(){
     digitalWrite(_m1_pin, HIGH); 
 
     int receive[64];
-    register_access(command, sizeof(command) / sizeof(uint8_t), receive);
+    register_access(command, sizeof(command) / sizeof(int), receive);
 
     //modeを元に戻す
     this->mode(_mode);
@@ -231,7 +261,7 @@ CODE FL_E220_900T22S_JP::set_temporary_register(){
     digitalWrite(_m1_pin, HIGH); 
 
     int receive[64];
-    register_access(command, sizeof(command) / sizeof(uint8_t), receive);
+    register_access(command, sizeof(command) / sizeof(int), receive);
 
     //modeを元に戻す
     this->mode(_mode);
@@ -319,9 +349,9 @@ bool FL_E220_900T22S_JP::rssi_snr(){
         int command[] = {0xC0, 0xC1, 0xC2, 0xC3, 0x00, 0x02 };
 
         int receive[64];
-        register_access(command, sizeof(command) / sizeof(uint8_t), receive);
+        register_access(command, sizeof(command) / sizeof(int), receive);
 
-        if(receive[0] == 0xC1){
+        if(receive[0] == 0xC1 || receive[1] == 0xC1){
             int NoiseRSSI = -(256 - receive[3]);
             if(receive[4] == 0){
                 return false;

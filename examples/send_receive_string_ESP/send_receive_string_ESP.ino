@@ -10,14 +10,14 @@
 //シールドピン設定
 #define SW_1 19
 #define RX_pin 14    
-#define TX_pin 12
+#define TX_pin 13
 #define Lora_power_pin 23
 #define Aux_status_pin 16
 #define M0_pin 17
 #define M1_pin 5
 
 
-
+/*
 //for Arduino Uno R3
 #include <SoftwareSerial.h>
 SoftwareSerial mySerial(RX_pin, TX_pin); // Arduino RX <-- e220 TX, Arduino TX --> e220 RX
@@ -25,7 +25,7 @@ FL_E220_900T22S_JP LoRa1(&mySerial,LORA_POWER_PIN_ENABLE,Lora_power_pin
                         ,AUX_STATUS_PIN_ENABLE,Aux_status_pin,M0_pin,M1_pin);
 //      LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
 //      AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
-
+*/
 
 /*
 //for Arduino Leonardo / 
@@ -34,6 +34,13 @@ FL_E220_900T22S_JP LoRa1(&Serial1,LORA_POWER_PIN_ENABLE,Lora_power_pin
 //      LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
 //      AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
 */
+
+//for ESPr® One 32 / 
+FL_E220_900T22S_JP LoRa1(&Serial1,RX_pin,TX_pin,LORA_POWER_PIN_ENABLE,Lora_power_pin
+                        ,AUX_STATUS_PIN_ENABLE,Aux_status_pin,M0_pin,M1_pin);
+//      LORA_POWER_PIN_Disabled or LORA_POWER_PIN_ENABLE
+//      AUX_STATUS_PIN_Disabled or AUX_STATUS_PIN_ENABLE
+
 
 void setup() {
 
@@ -135,7 +142,6 @@ void setup() {
     }else if(Ret == CODE_UNKNOWN_ERROR){
         Serial.println("Reg NG!!!!!!!!!");
     }
-
 
 
     //SW10(D12)のピン設定

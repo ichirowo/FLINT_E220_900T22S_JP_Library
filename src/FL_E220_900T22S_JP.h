@@ -3,15 +3,14 @@
 //        クレアリンクテクノロジーの発売するLoRaモジュール、
 //        E220-900T22S(JP) をArduinoから制御するライブラリです。
 //    2023/08/14　Ver.0.0.1
+//    for ArduinoIDE 2.2.1以降
+//
+// Note: E220-900T22S (JP) is a module customized for Japan.
+//       This library does not work with E220-900T22S.
 //---------------------------------------------------------------------
-
-#include "Arduino.h"
-#include <SoftwareSerial.h>
 
 #ifndef FL_E220_900T22S_JP_h // 2重インクルードを防ぐ
 #define FL_E220_900T22S_JP_h
-
-
 
 //デバッグ用
 #define DEBUG_BUILD
@@ -26,6 +25,16 @@
     #define DEBUG_PRINTLN( message )
     #define DEBUG_PRINT( message )
     #define DEBUG_WRITE( message )
+#endif
+
+
+#include "Arduino.h"
+
+
+#ifdef ESP32
+
+#else
+#include <SoftwareSerial.h>
 #endif
 
 
@@ -167,6 +176,12 @@ public:
 
     struct Register Register;
 
+#ifdef ESP32
+    FL_E220_900T22S_JP(HardwareSerial* serial, int rx_pin, int tx_pin
+                        ,bool lora_power_enable
+                        ,uint8_t lora_power_pin, bool aux_status_enable
+                        , uint8_t aux_status_pin, uint8_t m0_pin, uint8_t m1_pin);
+#else
     FL_E220_900T22S_JP(SoftwareSerial* serial, bool lora_power_enable
                         ,uint8_t lora_power_pin, bool aux_status_enable
                         , uint8_t aux_status_pin, uint8_t m0_pin, uint8_t m1_pin);
@@ -174,6 +189,7 @@ public:
     FL_E220_900T22S_JP(HardwareSerial* serial, bool lora_power_enable
                         ,uint8_t lora_power_pin, bool aux_status_enable
                         , uint8_t aux_status_pin, uint8_t m0_pin, uint8_t m1_pin);
+#endif
 
 
     void begin();
@@ -209,8 +225,16 @@ private:
     uint8_t _m1_pin              = 0;
     uint8_t _mode                = 0;
 
+
+#ifdef ESP32
+    HardwareSerial* ss;
+    HardwareSerial* hs;
+#else
     SoftwareSerial* ss;
     HardwareSerial* hs;
+#endif
+
+
 
     void register_access(int *command, int numlen, int return_data[64]);
 
