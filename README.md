@@ -12,14 +12,19 @@
 
   - Arduino UNO R3
   - Arduino Leonardo
+  - SwitchScience ESPr® One 32
 
 ## 開発環境 Development environment
 
-https://flint.works/p/e220-900t22s-for-arduino/
+[https://flint.works/p/e220-900t22s-for-arduino/](https://flint.works/p/e220-900t22s-for-arduino/)
 
 ## インストール方法 Installation
 
-Automatic IDEの「ツール」→「ライブラリを管理」から、「FLINT」を検索し「FLINT E220-900T22S-JP」をインストールします。
+Arduino IDEの「ツール」→「ライブラリを管理」から、「FLINT」を検索し「FLINT E220-900T22S-JP」をインストールします。
+
+## E220-900T22S（JP）データシート
+
+[https://dragon-torch.tech/wp-content/uploads/2023/05/data_sheet_Rev1.4.pdf](https://dragon-torch.tech/wp-content/uploads/2023/05/data_sheet_Rev1.4.pdf)
 
 ## メソッド
 

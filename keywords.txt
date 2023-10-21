@@ -1,0 +1,109 @@
+#######################################
+# FLINT E220-900T22S-JP Library
+#######################################
+# Class
+#######################################
+
+FLINT_E220_900T22S_JP	KEYWORD1
+
+#######################################
+# Methods and Functions
+#######################################	
+
+begin			        KEYWORD2
+mode			        KEYWORD2
+reset			        KEYWORD2
+available		        KEYWORD2
+write			        KEYWORD2
+read			        KEYWORD2
+set_register		    KEYWORD2
+read_register		    KEYWORD2
+set_temporary_register	KEYWORD2
+receive_string		    KEYWORD2
+send_string		        KEYWORD2
+rssi_snr		        KEYWORD2
+aux_status		        KEYWORD2
+
+
+#######################################
+# Structures
+#######################################
+
+UART_RATE           KEYWORD3
+AIR_RATE            KEYWORD3
+SUB_PACKET          KEYWORD3
+RSSI_NOISE          KEYWORD3
+TRANSMIT_POWER      KEYWORD3
+RSSI_BYTE           KEYWORD3
+TRANSMISSION_METHOD KEYWORD3
+WOR_CYCLE           KEYWORD3
+LORA_POWER_PIN      KEYWORD3
+AUX_STATUS_PIN      KEYWORD3
+MODE                KEYWORD3
+CODE                KEYWORD3
+Register            KEYWORD3
+
+#######################################
+# Constants
+#######################################
+
+UART_RATE1200			        LITERAL1
+UART_RATE2400			        LITERAL1
+UART_RATE4800			        LITERAL1
+UART_RATE9600			        LITERAL1
+UART_RATE19200			        LITERAL1
+UART_RATE38400			        LITERAL1
+UART_RATE57600			        LITERAL1
+UART_RATE115200			        LITERAL1
+AIR_RATE15625			        LITERAL1
+AIR_RATE9375			        LITERAL1
+AIR_RATE5469			        LITERAL1
+AIR_RATE3125			        LITERAL1
+AIR_RATE1758			        LITERAL1
+AIR_RATE31250			        LITERAL1
+AIR_RATE18750			        LITERAL1
+AIR_RATE10938			        LITERAL1
+AIR_RATE6250			        LITERAL1
+AIR_RATE3516			        LITERAL1
+AIR_RATE1953			        LITERAL1
+AIR_RATE62500			        LITERAL1
+AIR_RATE37500			        LITERAL1
+AIR_RATE21875			        LITERAL1
+AIR_RATE12500			        LITERAL1
+AIR_RATE7031			        LITERAL1
+AIR_RATE3906			        LITERAL1
+AIR_RATE2148			        LITERAL1
+SUB_PACKET200			        LITERAL1
+SUB_PACKET128			        LITERAL1
+SUB_PACKET64			        LITERAL1
+SUB_PACKET32			        LITERAL1
+RSSI_NOISE_Disabled		        LITERAL1
+RSSI_NOISE_Enabled		        LITERAL1
+TRANSMIT_POWER13		        LITERAL1
+TRANSMIT_POWER12		        LITERAL1
+TRANSMIT_POWER7			        LITERAL1
+TRANSMIT_POWER0			        LITERAL1
+RSSI_BYTE_Disabled		        LITERAL1
+RSSI_BYTE_Enabled		        LITERAL1
+TRANSMISSION_METHOD_TRANSPARENT	LITERAL1
+TRANSMISSION_METHOD_FIXED	    LITERAL1
+WOR_CYCLE500			        LITERAL1
+WOR_CYCLE1000			        LITERAL1
+WOR_CYCLE1500			        LITERAL1
+WOR_CYCLE2000			        LITERAL1
+WOR_CYCLE2500			        LITERAL1
+WOR_CYCLE3000			        LITERAL1
+LORA_POWER_PIN_Disabled		    LITERAL1
+LORA_POWER_PIN_ENABLE		    LITERAL1
+AUX_STATUS_PIN_Disabled		    LITERAL1
+AUX_STATUS_PIN_ENABLE		    LITERAL1
+MODE_NORMAL			            LITERAL1
+MODE_WOR_SEND			        LITERAL1
+MODE_WOR_RECEIVE		        LITERAL1
+MODE_CONFIG			            LITERAL1
+CODE_COMPLETE			        LITERAL1
+CODE_FORMAT_ERROR		        LITERAL1
+CODE_UNKNOWN_ERROR		        LITERAL1
+
+
+
