@@ -18,7 +18,7 @@
 #define FLINT_E220_900T22S_JP_h
 
 //デバッグ用
-#define DEBUG_BUILD
+#define DEBUG_BUILD____
 
 #ifdef DEBUG_BUILD
     #define DEBUG_PRINT_HEX( message ) { Serial.print( message ,HEX); }
